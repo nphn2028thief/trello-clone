@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import localFont from "next/font/local";
+import { Manrope } from "next/font/google";
 
 import { EPath } from "@/constants/path";
 import { cn } from "@/lib/utils";
 
-const headingFont = localFont({
-  src: "../../../public/fonts/font.woff2",
+const headingFont = Manrope({
+  subsets: ["latin"],
+  weight: ["700"],
 });
 
 const Logo = () => {
