@@ -1,13 +1,14 @@
 import Link from "next/link";
-import localFont from "next/font/local";
-import { Poppins } from "next/font/google";
+import { Manrope, Poppins } from "next/font/google";
 import { Medal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { EPath } from "@/constants/path";
 
-const headingFont = localFont({
-  src: "../../../public/fonts/font.woff2",
+const headingFont = Manrope({
+  subsets: ["latin"],
+  weight: ["700"],
 });
 
 const textFont = Poppins({
@@ -26,10 +27,10 @@ const LandingPage = () => {
       >
         <div className="flex items-center gap-2 border shadow-sm p-4 bg-amber-100 text-amber-700 uppercase rounded-full">
           <Medal className="w-6 h-6" />
-          <span>No 1 task management</span>
+          <p className="h-[22px]">No 1 task management</p>
         </div>
 
-        <h1 className="text-2xl md:text-4xl text-center text-neutral-800 mt-4 mb-6">
+        <h1 className="text-2xl md:text-4xl text-center text-neutral-800 my-4">
           Taskify helps team move
         </h1>
 
@@ -39,7 +40,7 @@ const LandingPage = () => {
 
         <div
           className={cn(
-            "max-w-xs md:max-w-2xl text-center text-sm md:text-base text-neutral-400 mt-4",
+            "max-w-xs md:max-w-2xl text-center text-sm md:text-base font-medium text-neutral-400 mt-4",
             textFont.className
           )}
         >
@@ -49,7 +50,7 @@ const LandingPage = () => {
         </div>
 
         <Button className="mt-4" size="lg" asChild>
-          <Link href="/sign-up">Get Taskify for free</Link>
+          <Link href={EPath.SIGNUP}>Get Taskify for free</Link>
         </Button>
       </div>
     </div>
