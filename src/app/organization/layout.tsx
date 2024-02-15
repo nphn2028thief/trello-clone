@@ -8,11 +8,11 @@ const OrganizationLayout = ({ children }: { children: ReactNode }) => {
     <div className="h-full">
       <Navbar />
       <main className="max-w-6xl 2xl:max-w-screen-xl h-full pt-20 md:pt-24 px-4 mx-auto">
-        <div className="h-full flex gap-7 pb-4">
-          <div className="w-64 hidden md:block shrink-0">
+        <div className="h-full flex gap-7 pb-2">
+          <div className="w-64 hidden md:block shrink-0 overflow-x-scroll">
             <Sidebar />
           </div>
-          <div className="flex-1 overflow-y-scroll">{children}</div>
+          <div className="flex-1 overflow-y-scroll relative">{children}</div>
         </div>
       </main>
     </div>

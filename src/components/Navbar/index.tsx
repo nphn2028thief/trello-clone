@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 import { Menu, Plus } from "lucide-react";
@@ -12,7 +13,8 @@ import useMobileSidebar from "@/hooks/useMobileSidebar";
 import { EPath } from "@/constants/path";
 
 const Navbar = () => {
-  // const { isSignedIn } = useAuth();
+  const router = useRouter();
+
   const { isSignedIn, isLoaded } = useUser();
 
   const { onOpen } = useMobileSidebar();
@@ -37,6 +39,7 @@ const Navbar = () => {
             size="sm"
             variant="primary"
             className="hidden md:block rounded-sm"
+            onClick={() => router.push(EPath.SELECT_ORGANIZATION)}
           >
             Create
           </Button>
@@ -44,6 +47,7 @@ const Navbar = () => {
             size="sm"
             variant="primary"
             className="block md:hidden rounded-sm"
+            onClick={() => router.push(EPath.SELECT_ORGANIZATION)}
           >
             <Plus className="w-4 h-4" />
           </Button>

@@ -6,3 +6,8 @@ export enum EPath {
   ORGANIZATION = "/organization",
   ORGANIZATION_DETAIL = "/organization/:id",
 }
+
+export enum EApiPath {
+  CREATE_BOARD = "/board",
+  GET_BOARDS = "/boards",
+}
