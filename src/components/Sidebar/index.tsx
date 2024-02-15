@@ -57,7 +57,19 @@ const Sidebar = (props: IProps) => {
     !isLoadedOrganizationList ||
     userMemberships.isLoading
   ) {
-    return <Skeleton />;
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center mt-1">
+          <Skeleton className="w-3/5 h-6" />
+          <Skeleton className="w-8 h-6" />
+        </div>
+        <div className="flex flex-col gap-3">
+          {Array.from({ length: 5 }, (_, index) => (
+            <SidebarItem.Skeleton key={index} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
