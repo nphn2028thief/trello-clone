@@ -11,6 +11,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import useMobileSidebar from "@/hooks/useMobileSidebar";
 import { EPath } from "@/constants/path";
 import { IOrganization } from "@/types/organization";
 import { IRoute } from "@/types/route";
@@ -28,6 +30,8 @@ const SidebarItem = (props: IProps) => {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const { onClose } = useMobileSidebar();
 
   const routes = useRef<IRoute[]>([
     {
@@ -90,9 +94,13 @@ const SidebarItem = (props: IProps) => {
             variant="ghost"
             className={cn(
               "justify-start pl-11 mb-1 hover:bg-neutral-500/5",
-              pathname === item.href && "bg-sky-500/10 text-sky-700"
+              pathname === item.href &&
+                "bg-sky-500/10 text-sky-700 hover:bg-sky-500/15 hover:text-sky-700"
             )}
-            onClick={() => router.push(item.href)}
+            onClick={() => {
+              router.push(item.href);
+              onClose();
+            }}
           >
             {item.icon}
             {item.label}
@@ -100,6 +108,17 @@ const SidebarItem = (props: IProps) => {
         ))}
       </AccordionContent>
     </AccordionItem>
+  );
+};
+
+SidebarItem.Skeleton = function SkeletonSidebarItem() {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="w-10 h-10 relative shrink-0">
+        <Skeleton className="w-full h-full absolute" />
+      </div>
+      <Skeleton className="w-full h-10" />
+    </div>
   );
 };
 
