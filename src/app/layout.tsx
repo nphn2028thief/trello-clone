@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ToastContainer } from "react-toastify";
 
 import siteConfig from "@/configs/site";
 import QueryClientProvider from "./QueryClientProvider";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +28,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider>
-          <ClerkProvider>{children}</ClerkProvider>
+          <ClerkProvider>
+            {children}
+            <ToastContainer autoClose={2000} />
+          </ClerkProvider>
         </QueryClientProvider>
       </body>
     </html>
