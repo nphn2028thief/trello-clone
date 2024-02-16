@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 import { Menu, Plus } from "lucide-react";
@@ -9,12 +8,11 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import Logo from "../Logo";
 import MobileSidebar from "../MobileSidebar";
+import FormPopover from "../Form/Popover";
 import useMobileSidebar from "@/hooks/useMobileSidebar";
 import { EPath } from "@/constants/path";
 
 const Navbar = () => {
-  const router = useRouter();
-
   const { isSignedIn, isLoaded } = useUser();
 
   const { onOpen } = useMobileSidebar();
@@ -35,22 +33,24 @@ const Navbar = () => {
           >
             <Menu className="w-4 h-4" />
           </Button>
-          <Button
-            size="sm"
-            variant="primary"
-            className="hidden md:block rounded-sm"
-            onClick={() => router.push(EPath.SELECT_ORGANIZATION)}
-          >
-            Create
-          </Button>
-          <Button
-            size="sm"
-            variant="primary"
-            className="block md:hidden rounded-sm"
-            onClick={() => router.push(EPath.SELECT_ORGANIZATION)}
-          >
-            <Plus className="w-4 h-4" />
-          </Button>
+          <FormPopover side="bottom" align="start" sideOffset={18}>
+            <Button
+              size="sm"
+              variant="primary"
+              className="hidden md:block rounded-sm"
+            >
+              Create
+            </Button>
+          </FormPopover>
+          <FormPopover sideOffset={18}>
+            <Button
+              size="sm"
+              variant="primary"
+              className="block md:hidden rounded-sm"
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </FormPopover>
         </>
       );
     }
