@@ -10,4 +10,11 @@ export interface IBoardRequest extends IBoard {
 export interface IBoardResponse {
   _id: string;
   title: string;
+  image: {
+    id: string;
+    thumbUrl: string;
+    fullUrl: string;
+    username: string;
+    linkHtml: string;
+  };
 }
