@@ -27,7 +27,7 @@ export default authMiddleware({
     if (
       auth.userId &&
       !auth.orgId &&
-      req.nextUrl.password !== EPath.SELECT_ORGANIZATION
+      req.nextUrl.pathname !== EPath.SELECT_ORGANIZATION
     ) {
       return NextResponse.redirect(new URL(EPath.SELECT_ORGANIZATION, req.url));
     }

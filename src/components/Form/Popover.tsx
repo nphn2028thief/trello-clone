@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 import axiosClient from "@/api/axiosClient";
@@ -21,7 +21,7 @@ import FormPicker from "./Picker";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
 import { IParams, IResponse } from "@/types";
-import { IBoard, IBoardRequest, IBoardResponse } from "@/types/board";
+import { IBoard, IBoardRequest } from "@/types/board";
 
 interface IProps {
   children: ReactNode;
@@ -91,20 +91,6 @@ const FormPopover = (props: IProps) => {
       setFocus("title");
       toast.error(error.message || "Create board failure!");
     },
-  });
-
-  // Call and handle api get boards
-  const { data: boards } = useQuery({
-    queryKey: [QUERY_KEY.BOARD, params.id],
-    queryFn: async () => {
-      const res = await axiosClient.get<IBoardResponse[]>(
-        `${EApiPath.GET_BOARDS}/${params.id}`
-      );
-      return res.data;
-    },
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
   });
 
   const onSubmit = (data: IBoard) => {
