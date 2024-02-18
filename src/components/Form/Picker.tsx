@@ -1,9 +1,9 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useQuery } from "@tanstack/react-query";
 import { Check, Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import {
@@ -15,11 +15,13 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 
+import { getUnsplashImage } from "@/api/http";
+
+import useGet from "@/hooks/useGet";
 import FormError from "./Error";
 import { QUERY_KEY } from "@/constants/key";
 import { defaultImages } from "@/constants/images";
 import { cn } from "@/lib/utils";
-import { unsplash } from "@/lib/unsplash";
 
 interface IProps<T extends FieldValues> {
   name: Path<T>;
@@ -39,28 +41,15 @@ const FormPicker = <T extends FieldValues>(props: IProps<T>) => {
 
   const {
     data: unsplashResult,
-    isError,
     isLoading,
     isFetching,
-  } = useQuery({
-    queryKey: [QUERY_KEY.UNSPLASH],
-    queryFn: async () => {
-      const result = await unsplash.photos.getRandom({
-        collectionIds: ["317099"],
-        count: 9,
-      });
-
-      return result;
-    },
-    enabled: false,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
+    isError,
+  } = useGet([QUERY_KEY.UNSPLASH], getUnsplashImage, true, true);
 
   useEffect(() => {
     if (isError) {
       setImages(defaultImages);
+      toast.error("Get images from unsplash failure!");
     }
   }, [isError]);
 
@@ -68,10 +57,8 @@ const FormPicker = <T extends FieldValues>(props: IProps<T>) => {
     if (unsplashResult && unsplashResult.response) {
       const newImages = unsplashResult.response as Array<Record<string, any>>;
       setImages(newImages);
-    } else {
-      toast.error("Get images from unsplash failure!");
     }
-  }, [unsplashResult]);
+  }, [isError, unsplashResult]);
 
   if (isLoading || isFetching) {
     return (

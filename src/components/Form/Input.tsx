@@ -1,5 +1,4 @@
 import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
 import FormError from "./Error";
 
 interface IProps {

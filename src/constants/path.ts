@@ -11,5 +11,6 @@ export enum EPath {
 
 export enum EApiPath {
   CREATE_BOARD = "/board",
+  GET_BOARD = "/board",
   GET_BOARDS = "/boards",
 }

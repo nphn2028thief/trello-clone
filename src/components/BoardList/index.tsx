@@ -1,15 +1,15 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HelpCircle, User2 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
 
-import axiosClient from "@/api/axiosClient";
+import { getBoards } from "@/api/http";
 
+import useGet from "@/hooks/useGet";
 import { Skeleton } from "../ui/skeleton";
 import Hint from "../Hint";
 import FormPopover from "../Form/Popover";
 import { QUERY_KEY } from "@/constants/key";
-import { EApiPath, EPath } from "@/constants/path";
+import { EPath } from "@/constants/path";
 import { IParams } from "@/types";
 import { IBoardResponse } from "@/types/board";
 
@@ -21,18 +21,9 @@ const BoardList = () => {
     data: boards,
     isLoading,
     isFetching,
-  } = useQuery({
-    queryKey: [QUERY_KEY.BOARD, params.id],
-    queryFn: async () => {
-      const res = await axiosClient.get<IBoardResponse[]>(
-        `${EApiPath.GET_BOARDS}/${params.id}`
-      );
-      return res.data;
-    },
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
+  } = useGet<IBoardResponse[]>([QUERY_KEY.BOARDS, params.id], () =>
+    getBoards(params.id)
+  );
 
   if (isLoading || isFetching) {
     return (

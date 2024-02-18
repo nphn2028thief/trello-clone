@@ -1,4 +1,5 @@
 export enum QUERY_KEY {
-  BOARD = "boards",
+  BOARD = "board",
+  BOARDS = "boards",
   UNSPLASH = "unsplash",
 }
