@@ -1,9 +1,6 @@
 import axios, { AxiosError } from "axios";
 
-const baseURL =
-  process.env.NEXT_PUBLIC_NODE_ENV === "development"
-    ? process.env.NEXT_PUBLIC_DEV_API_URL
-    : process.env.NEXT_PUBLIC_API_URL;
+import { baseURL } from "@/constants";
 
 const axiosClient = axios.create({
   baseURL,

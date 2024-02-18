@@ -85,7 +85,7 @@ const FormPopover = (props: IProps) => {
       reset();
       closeRef.current?.click();
       toast.success(data.message || "Board created!");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.BOARD] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.BOARDS] });
     },
     onError: (error) => {
       setFocus("title");
