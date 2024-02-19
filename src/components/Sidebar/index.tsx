@@ -64,7 +64,7 @@ const Sidebar = (props: IProps) => {
           <Skeleton className="w-8 h-6" />
         </div>
         <div className="flex flex-col gap-3">
-          {Array.from({ length: 5 }, (_, index) => (
+          {Array.from({ length: 2 }, (_, index) => (
             <SidebarItem.Skeleton key={index} />
           ))}
         </div>

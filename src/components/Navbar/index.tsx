@@ -103,7 +103,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="h-14 flex items-center fixed left-0 top-0 right-0 px-4 border-b bg-white shadow-sm z-[999]">
+      <nav className="h-navbar flex items-center fixed left-0 top-0 right-0 px-4 border-b bg-white shadow-sm z-[999]">
         <div className="md:max-w-screen-2xl w-full flex justify-between items-center mx-auto">
           <div className="flex items-center md:gap-4">
             <Logo />

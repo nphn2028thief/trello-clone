@@ -44,7 +44,7 @@ const FormPicker = <T extends FieldValues>(props: IProps<T>) => {
     isLoading,
     isFetching,
     isError,
-  } = useGet([QUERY_KEY.UNSPLASH], getUnsplashImage, true, true);
+  } = useGet([QUERY_KEY.UNSPLASH], getUnsplashImage, false, true);
 
   useEffect(() => {
     if (isError) {

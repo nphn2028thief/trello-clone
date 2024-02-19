@@ -1,39 +1,12 @@
-"use client";
+import { Suspense } from "react";
 
-import { notFound } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import LazyLoading from "@/components/LazyLoading";
 
-import { getBoardByIdAndOrgId } from "@/api/http";
-
-import useGet from "@/hooks/useGet";
-import { QUERY_KEY } from "@/constants/key";
-import { IParams } from "@/types";
-import { IBoardResponse } from "@/types/board";
-
-const BoardDetailPage = ({ params }: { params: IParams }) => {
-  const { orgId } = useAuth();
-
-  // Call and handle api get board by id and organization id
-  const { data: board, isError } = useGet<IBoardResponse>(
-    [QUERY_KEY.BOARD, orgId, params.id],
-    () => getBoardByIdAndOrgId(orgId as string, params.id)
-  );
-
-  if (isError) {
-    notFound();
-  }
-
+const BoardDetailPage = () => {
   return (
-    <div
-      style={{
-        backgroundImage: `url(${board?.image.fullUrl})`,
-      }}
-      className="h-full relative bg-center bg-cover bg-no-repeat"
-    >
-      <div className="h-full pt-20">
-        <div>BoardDetailPage</div>
-      </div>
-    </div>
+    <Suspense fallback={<LazyLoading />}>
+      <div>BoardDetailPage</div>
+    </Suspense>
   );
 };
 

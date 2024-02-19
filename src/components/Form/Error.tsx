@@ -3,7 +3,7 @@ import { ErrorMessage } from "@hookform/error-message";
 
 interface IProps {
   htmlFor: string;
-  errors: FieldErrors;
+  errors?: FieldErrors;
 }
 
 const FormError = (props: IProps) => {
