@@ -18,6 +18,12 @@ const config = {
       },
     },
     extend: {
+      spacing: {
+        navbar: "3.5rem",
+      },
+      inset: {
+        navbar: "3.5rem",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

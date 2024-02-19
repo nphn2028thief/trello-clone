@@ -21,8 +21,11 @@ const BoardList = () => {
     data: boards,
     isLoading,
     isFetching,
-  } = useGet<IBoardResponse[]>([QUERY_KEY.BOARDS, params.id], () =>
-    getBoards(params.id)
+  } = useGet<IBoardResponse[]>(
+    [QUERY_KEY.BOARDS, params.id],
+    () => getBoards(params.id),
+    true,
+    true
   );
 
   if (isLoading || isFetching) {
@@ -51,9 +54,9 @@ const BoardList = () => {
               key={item._id}
               href={`${EPath.BOARD}/${item._id}`}
               style={{
-                backgroundImage: `url(${item.image.thumbUrl})`,
+                background: `url(${item.image.thumbUrl}) center / cover no-repeat`,
               }}
-              className="group w-full h-full relative aspect-video bg-center bg-cover bg-no-repeat p-2 bg-sky-700 rounded-sm overflow-hidden"
+              className="group w-full h-full relative aspect-video p-2 bg-sky-700 rounded-sm overflow-hidden"
             >
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition" />
               <p className="relative font-semibold text-white">{item.title}</p>

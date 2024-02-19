@@ -113,12 +113,19 @@ const SidebarItem = (props: IProps) => {
 
 SidebarItem.Skeleton = function SkeletonSidebarItem() {
   return (
-    <div className="flex items-center gap-2">
-      <div className="w-10 h-10 relative shrink-0">
-        <Skeleton className="w-full h-full absolute" />
+    <>
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-10 relative shrink-0">
+          <Skeleton className="w-full h-full absolute" />
+        </div>
+        <Skeleton className="w-full h-10" />
       </div>
-      <Skeleton className="w-full h-10" />
-    </div>
+      <div className="flex flex-col gap-3 ml-12">
+        {Array.from({ length: 4 }, (_, index) => (
+          <Skeleton key={index} className="w-full h-9" />
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -13,4 +13,6 @@ export enum EApiPath {
   CREATE_BOARD = "/board",
   GET_BOARD = "/board",
   GET_BOARDS = "/boards",
+  UPDATE_BOARD = "/board",
+  DELETE_BOARD = "/board",
 }
