@@ -14,7 +14,7 @@ import useClickOuside from "@/hooks/useClickOutside";
 import FormInput from "@/components/Form/Input";
 import { Button } from "@/components/ui/button";
 import { EApiPath } from "@/constants/path";
-import { IResponse } from "@/types";
+import { ICreate, IResponse } from "@/types";
 import { IBoard, IBoardResponse } from "@/types/board";
 
 const schema = Yup.object({
@@ -26,7 +26,7 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const defaultValues = useMemo<Omit<IBoard, "image">>(() => {
+  const defaultValues = useMemo<ICreate>(() => {
     return {
       title: data ? data.title : "",
     };
@@ -38,7 +38,7 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
     reset,
     formState: { isDirty },
     handleSubmit,
-  } = useForm<Omit<IBoard, "image">>({
+  } = useForm<ICreate>({
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -53,7 +53,7 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
   const { mutate: updateTitleBoard } = useMutation({
     mutationFn: async (value: Omit<IBoard, "image">) => {
       const res = await axiosClient.patch<IResponse>(
-        `${EApiPath.UPDATE_BOARD}/${data._id}`,
+        `${EApiPath.BOARD}/${data._id}`,
         value
       );
       return res.data;
@@ -70,7 +70,7 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
     },
   });
 
-  const onSubmit = (data: Omit<IBoard, "image">) => {
+  const onSubmit = (data: ICreate) => {
     isDirty ? updateTitleBoard(data) : setIsEdit(false);
   };
 

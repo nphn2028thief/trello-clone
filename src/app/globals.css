@@ -18,12 +18,12 @@ body,
 html *::-webkit-scrollbar {
   border-radius: 0;
   width: 4px;
-  height: 4px;
+  height: 14px;
 }
 
 html *::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: #fff6;
 }
 
 html *::-webkit-scrollbar-track {

@@ -4,7 +4,7 @@ import { IBoardResponse } from "@/types/board";
 
 const BoardNavbar = ({ data }: { data: IBoardResponse }) => {
   return (
-    <div className="h-navbar flex justify-between items-center fixed left-0 top-navbar right-0 pl-5 pr-[17px] md:pl-2 md:pr-4 text-white bg-black/50 z-20">
+    <div className="h-navbar flex justify-between items-center fixed left-0 top-navbar right-0 pl-5 pr-[17px] md:px-4 text-white bg-black/50 z-20">
       <BoardNavbarTitle data={data} />
       <BoardNavbarOptions id={data._id} />
     </div>

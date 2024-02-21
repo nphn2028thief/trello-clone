@@ -29,7 +29,7 @@ const BoardNavbarOptions = ({ id }: { id: string }) => {
   const { mutate: deleteBoard, isPending } = useMutation({
     mutationFn: async () => {
       const res = await axiosClient.delete<IResponse>(
-        `${EApiPath.DELETE_BOARD}/${id}`
+        `${EApiPath.BOARD}/${id}`
       );
       return res.data;
     },
