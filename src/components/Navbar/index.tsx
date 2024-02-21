@@ -81,6 +81,11 @@ const Navbar = () => {
                 rootBox: {
                   display: "flex",
                 },
+                organizationSwitcherTrigger: {
+                  "&:focus": {
+                    boxShadow: "none",
+                  },
+                },
               },
             }}
           />

@@ -75,10 +75,7 @@ const FormPopover = (props: IProps) => {
   // Call and handle api create board
   const { mutate: createBoard } = useMutation({
     mutationFn: async (data: IBoardRequest) => {
-      const res = await axiosClient.post<IResponse>(
-        `${EApiPath.CREATE_BOARD}`,
-        data
-      );
+      const res = await axiosClient.post<IResponse>(`${EApiPath.BOARD}`, data);
       return res.data;
     },
     onSuccess: (data) => {

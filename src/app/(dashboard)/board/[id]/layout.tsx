@@ -61,7 +61,7 @@ const BoardDetailLayout = async (props: IProps) => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/15" />
 
-      <main className="h-full pt-28">{children}</main>
+      <main className="h-full relative pt-28">{children}</main>
     </div>
   );
 };

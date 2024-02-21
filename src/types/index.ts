@@ -8,3 +8,7 @@ export interface IResponse {
 export interface IParams extends Params {
   id: string;
 }
+
+export interface ICreate {
+  title: string;
+}
