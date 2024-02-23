@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,7 +18,10 @@ import { ICreate, IResponse } from "@/types";
 import { IListResponse } from "@/types/list";
 
 interface IProps {
+  boardId: string;
+  orgId: string;
   data: IListResponse;
+  onEnableEdit: () => void;
 }
 
 const schema = Yup.object({
@@ -26,7 +29,7 @@ const schema = Yup.object({
 });
 
 const ListHeader = (props: IProps) => {
-  const { data } = props;
+  const { boardId, orgId, data, onEnableEdit } = props;
 
   const queryClient = useQueryClient();
 
@@ -88,26 +91,30 @@ const ListHeader = (props: IProps) => {
   const formRef = useClickOuside(handleSubmit(onSubmit));
 
   return (
-    <div className="w-full flex justify-between items-center p-1 bg-[#f1f2f4] shadow-md rounded-md">
+    <div className="flex justify-between items-center">
       {isEdit ? (
-        <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+        <form
+          ref={formRef}
+          className="pl-0.5"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <FormInput
             htmlFor="title"
-            className="font-bold text-sm p-[1px] [&>div>input]:bg-transparent [&>div>input]:px-1.5"
+            className="font-bold text-sm p-[1px] [&>div>input]:bg-transparent [&>div>input]:px-3"
             register={register("title")}
           />
         </form>
       ) : (
         <div
-          className="w-full flex items-center gap-2 p-2 font-bold text-sm border-transparent"
+          className="w-full flex items-center gap-2 px-4 py-2 font-bold text-sm border-transparent"
           onClick={() => setIsEdit(true)}
         >
           {data.title}
         </div>
       )}
-      <ListOptions />
+      <ListOptions data={data} boardId={boardId} orgId={orgId} />
     </div>
   );
 };
 
-export default ListHeader;
+export default memo(ListHeader);

@@ -2,10 +2,11 @@ import { InputHTMLAttributes } from "react";
 import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
 
 import FormError from "./Error";
+import { Textarea } from "../ui/textarea";
+import { cn } from "@/lib/utils";
 
-interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+interface IProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   htmlFor: string;
-  type?: "text" | "password" | "email";
   label?: string;
   placeholder?: string;
   className?: string;
@@ -13,30 +14,24 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   errors?: FieldErrors;
 }
 
-const FormInput = (props: IProps) => {
-  const {
-    htmlFor,
-    type = "text",
-    label,
-    placeholder,
-    className,
-    register,
-    errors,
-    ...rest
-  } = props;
+const FormTextarea = (props: IProps) => {
+  const { htmlFor, label, placeholder, className, register, errors, ...rest } =
+    props;
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className="flex flex-col gap-2">
       {label ? (
         <label htmlFor={htmlFor} className="text-sm">
           {label}
         </label>
       ) : null}
       <div className="flex flex-col gap-1">
-        <input
-          type={type}
+        <Textarea
           id={htmlFor}
-          className="text-sm border border-[#ccc] hover:border-[#aaa] focus-within:border-[#aaa] rounded-sm px-3 py-1.5"
+          className={cn(
+            "resize-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus:ring-0 outline-none shadow-sm",
+            className
+          )}
           placeholder={placeholder}
           {...register}
           {...rest}
@@ -47,4 +42,4 @@ const FormInput = (props: IProps) => {
   );
 };
 
-export default FormInput;
+export default FormTextarea;
