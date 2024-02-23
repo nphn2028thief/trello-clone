@@ -93,7 +93,7 @@ const FormPopover = (props: IProps) => {
   const onSubmit = (data: IBoard) => {
     createBoard({
       ...data,
-      organizationId: params.id,
+      orgId: params.id,
     });
   };
 

@@ -1,8 +1,13 @@
+"use client";
+
+import { ElementRef, useRef } from "react";
+
 import { getListsByBoardAndOrg } from "@/api/http";
 
 import useGet from "@/hooks/useGet";
-import ListHeader from "./Header";
 import ListForm from "./Form";
+import ListItem from "./Item";
+import LazyLoading from "../LazyLoading";
 import { QUERY_KEY } from "@/constants/key";
 
 interface IProps {
@@ -13,22 +18,37 @@ interface IProps {
 const ListContainer = (props: IProps) => {
   const { boardId, orgId } = props;
 
-  const { data: lists } = useGet([QUERY_KEY.LISTS], () =>
-    getListsByBoardAndOrg(boardId, orgId)
+  const textareaRef = useRef<ElementRef<"textarea">>(null);
+
+  const { data: lists, isLoading } = useGet(
+    [QUERY_KEY.LISTS],
+    () => getListsByBoardAndOrg(boardId, orgId),
+    true,
+    true
   );
 
+  if (isLoading) {
+    return (
+      <ol className="h-full flex gap-3 pr-4 relative">
+        <LazyLoading className="!bg-transparent" />
+      </ol>
+    );
+  }
+
   return (
-    <ol className="h-full flex gap-3 pr-4">
+    <ol className="h-full flex gap-3 pr-4 relative">
       {lists &&
         lists.map((item) => (
-          <li key={item._id} className="w-[272px] h-full shrink-0">
-            <ListHeader data={item} />
-          </li>
+          <ListItem
+            key={item._id}
+            boardId={boardId}
+            orgId={orgId}
+            data={item}
+          />
         ))}
 
-      <div className="w-1 flex shrink-0 mr-4">
-        <ListForm boardId={boardId} orgId={orgId} />
-      </div>
+      <ListForm boardId={boardId} orgId={orgId} />
+      <div className="w-1 flex-shrink-0" />
     </ol>
   );
 };

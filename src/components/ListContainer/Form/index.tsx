@@ -69,7 +69,7 @@ const ListForm = (props: IProps) => {
     createList({
       title: data.title,
       boardId,
-      organizationId: orgId,
+      orgId,
     });
   };
 

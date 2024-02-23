@@ -1,12 +1,19 @@
+import { ICard } from "./card";
+
 export interface IListRequest {
   title: string;
   boardId: string;
-  organizationId: string;
+  orgId: string;
 }
 
 export interface IListResponse {
   _id: string;
   title: string;
   order: number;
-  cardIds: any[];
+  cards: ICard[];
+}
+
+export interface IListCopyRequest extends IListRequest {
+  listId: string;
+  cards: ICard[];
 }

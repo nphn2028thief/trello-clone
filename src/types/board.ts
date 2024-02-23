@@ -4,7 +4,7 @@ export interface IBoard {
 }
 
 export interface IBoardRequest extends IBoard {
-  organizationId: string;
+  orgId: string;
 }
 
 export interface IBoardResponse {

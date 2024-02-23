@@ -14,4 +14,7 @@ export enum EApiPath {
   BOARDS = "/boards",
   LIST = "/list",
   LISTS = "/lists",
+  COPY_LIST = "/list/copy",
+  CARD = "/card",
+  CARDS = "/cards",
 }
