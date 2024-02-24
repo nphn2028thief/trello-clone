@@ -12,6 +12,7 @@ import useGet from "@/hooks/useGet";
 import ListForm from "./Form";
 import ListItem from "./Item";
 import LazyLoading from "../LazyLoading";
+import OverlayLoading from "../OverlayLoading";
 import { QUERY_KEY } from "@/constants/key";
 import { EDndType } from "@/constants/dnd";
 import { EApiPath } from "@/constants/path";
@@ -210,6 +211,7 @@ const ListContainer = (props: IProps) => {
           </ol>
         )}
       </Droppable>
+      {isFetching ? <OverlayLoading /> : null}
     </DragDropContext>
   );
 };
