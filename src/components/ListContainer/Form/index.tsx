@@ -13,6 +13,7 @@ import axiosClient from "@/api/axiosClient";
 import useClickOuside from "@/hooks/useClickOutside";
 import FormInput from "@/components/Form/Input";
 import { Button } from "@/components/ui/button";
+import OverlayLoading from "@/components/OverlayLoading";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
 import { ICreate } from "@/types";
@@ -43,27 +44,33 @@ const ListForm = (props: IProps) => {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    isEdit && setFocus("title");
-  }, [isEdit, setFocus]);
-
   // Call and handle api create list
-  const { mutate: createList } = useMutation({
+  const {
+    mutate: createList,
+    isPending,
+    isSuccess,
+  } = useMutation({
     mutationFn: async (data: IListRequest) => {
       const res = await axiosClient.post(`${EApiPath.LIST}`, data);
       return res.data;
     },
     onSuccess: (data) => {
-      reset();
-      setIsEdit(false);
       toast.success(data.message || "List created!");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
+        .finally(() => reset());
     },
     onError: (error) => {
       setFocus("title");
       toast.error(error.message || "Create board failure!");
     },
   });
+
+  useEffect(() => {
+    if (isEdit || isSuccess) {
+      setFocus("title");
+    }
+  }, [isEdit, isSuccess, setFocus]);
 
   const onSubmit = (data: ICreate) => {
     createList({
@@ -78,7 +85,7 @@ const ListForm = (props: IProps) => {
       return (
         <form
           ref={formRef}
-          className="w-full flex flex-col gap-3 p-3 bg-white shadow-md rounded-md"
+          className="w-full flex flex-col gap-3 p-[9px] bg-white shadow-md rounded-md"
           onSubmit={handleSubmit(onSubmit)}
         >
           <FormInput
@@ -89,7 +96,7 @@ const ListForm = (props: IProps) => {
           />
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" className="">
               Add list
             </Button>
             <Button
@@ -116,7 +123,8 @@ const ListForm = (props: IProps) => {
   };
 
   return (
-    <li className="w-[288px] h-full shrink-0 pr-4">
+    <li className="w-[288px] h-full shrink-0">
+      {isPending ? <OverlayLoading /> : null}
       {handleRenderWhenEditMode()}
     </li>
   );

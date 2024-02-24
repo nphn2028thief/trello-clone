@@ -112,7 +112,12 @@ const ListHeader = (props: IProps) => {
           {data.title}
         </div>
       )}
-      <ListOptions data={data} boardId={boardId} orgId={orgId} />
+      <ListOptions
+        data={data}
+        boardId={boardId}
+        orgId={orgId}
+        onEnableEdit={onEnableEdit}
+      />
     </div>
   );
 };

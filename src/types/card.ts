@@ -9,3 +9,11 @@ export interface ICard {
   description: string;
   order: number;
 }
+
+export interface IUpdateOrderCard {
+  sourceId: string;
+  destId: string;
+  cardId?: string;
+  sourceCards: ICard[];
+  destCards: ICard[];
+}

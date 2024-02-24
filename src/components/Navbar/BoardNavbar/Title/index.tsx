@@ -78,7 +78,11 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
 
   if (isEdit) {
     return (
-      <form ref={formRef} className="flex items-center gap-2">
+      <form
+        ref={formRef}
+        className="flex items-center gap-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <FormInput
           htmlFor="title"
           className="font-bold [&>div>input]:bg-transparent"
