@@ -1,9 +1,10 @@
 "use client";
 
-import { ElementRef, useRef } from "react";
+import { ElementRef, memo, useRef } from "react";
 import { Copy, MoreHorizontal, Plus, Trash, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
 import axiosClient from "@/api/axiosClient";
 
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import OverlayLoading from "@/components/OverlayLoading";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
 import { IResponse } from "@/types";
@@ -24,16 +26,17 @@ interface IProps {
   data: IListResponse;
   boardId: string;
   orgId: string;
+  onEnableEdit: () => void;
 }
 
 const ListOptions = (props: IProps) => {
-  const { data, boardId, orgId } = props;
+  const { data, boardId, orgId, onEnableEdit } = props;
 
   const queryClient = useQueryClient();
 
   const closeRef = useRef<ElementRef<"button">>(null);
 
-  const { mutate: copyList } = useMutation({
+  const { mutate: copyList, isPending } = useMutation({
     mutationFn: async (data: IListCopyRequest) => {
       const res = await axiosClient.post<IResponse>(
         `${EApiPath.COPY_LIST}`,
@@ -54,7 +57,7 @@ const ListOptions = (props: IProps) => {
   const { mutate: deleteList } = useMutation({
     mutationFn: async () => {
       const res = await axiosClient.delete<IResponse>(
-        `${EApiPath.LIST}/${data._id}/${boardId}/${orgId}`
+        `${EApiPath.LIST}/${data._id}/`
       );
       return res.data;
     },
@@ -69,6 +72,7 @@ const ListOptions = (props: IProps) => {
 
   return (
     <Popover>
+      {isPending ? <OverlayLoading /> : null}
       <PopoverTrigger asChild>
         <Button variant="transparent" className="w-auto h-auto p-2 text-black">
           <MoreHorizontal className="w-4 h-4" />
@@ -96,6 +100,7 @@ const ListOptions = (props: IProps) => {
         <Button
           variant="ghost"
           className="w-full justify-between pl-5 pr-4 py-2 font-normal rounded-none"
+          onClick={onEnableEdit}
         >
           Add card
           <Plus className="w-4 h-4" />
@@ -109,7 +114,7 @@ const ListOptions = (props: IProps) => {
               title: data.title,
               boardId,
               orgId,
-              cards: data.cards,
+              cards: data.cards.map((card) => ({ ..._.omit(card, "_id") })),
             })
           }
         >
@@ -130,4 +135,4 @@ const ListOptions = (props: IProps) => {
   );
 };
 
-export default ListOptions;
+export default memo(ListOptions);

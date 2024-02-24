@@ -15,5 +15,9 @@ export interface IListResponse {
 
 export interface IListCopyRequest extends IListRequest {
   listId: string;
-  cards: ICard[];
+  cards: Omit<ICard, "_id">[];
+}
+
+export interface IUpdateOrderList {
+  lists: IListResponse[];
 }

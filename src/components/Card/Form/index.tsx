@@ -10,6 +10,7 @@ import axiosClient from "@/api/axiosClient";
 
 import { Button } from "@/components/ui/button";
 import FormTextarea from "@/components/Form/Textarea";
+import OverlayLoading from "@/components/OverlayLoading";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
 import { ICreate, IResponse } from "@/types";
@@ -44,15 +45,20 @@ const CardForm = (props: IProps) => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate: createCard, isSuccess } = useMutation({
+  const {
+    mutate: createCard,
+    isPending,
+    isSuccess,
+  } = useMutation({
     mutationFn: async (data: ICardCreateRequest) => {
       const res = await axiosClient.post<IResponse>(`${EApiPath.CARD}`, data);
       return res.data;
     },
     onSuccess: (data) => {
-      reset();
       toast.success(data.message || "Card created!");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
+        .finally(() => reset());
     },
     onError: (error) => {
       setFocus("title");
@@ -90,6 +96,7 @@ const CardForm = (props: IProps) => {
             <X className="w-4 h-4" />
           </Button>
         </div>
+        {isPending ? <OverlayLoading /> : null}
       </form>
     );
   }

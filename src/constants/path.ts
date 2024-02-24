@@ -15,6 +15,8 @@ export enum EApiPath {
   LIST = "/list",
   LISTS = "/lists",
   COPY_LIST = "/list/copy",
+  LIST_ORDER = "/list/order",
   CARD = "/card",
   CARDS = "/cards",
+  CARD_ORDER = "/card/order",
 }

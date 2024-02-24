@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import OverlayLoading from "@/components/OverlayLoading";
 import { QUERY_KEY } from "@/constants/key";
 import { EApiPath, EPath } from "@/constants/path";
 import { IResponse } from "@/types";
@@ -45,6 +46,7 @@ const BoardNavbarOptions = ({ id }: { id: string }) => {
 
   return (
     <Popover>
+      {isPending ? <OverlayLoading /> : null}
       <PopoverTrigger asChild>
         <Button variant="transparent" className="w-auto h-auto p-2">
           <MoreHorizontal className="w-4 h-4" />
@@ -72,7 +74,6 @@ const BoardNavbarOptions = ({ id }: { id: string }) => {
         <Button
           variant="ghost"
           className="w-full justify-between pl-5 pr-4 text-red-600 hover:text-red-500 py-2 font-normal rounded-none"
-          disabled={isPending}
           onClick={() => deleteBoard()}
         >
           Delete this board
