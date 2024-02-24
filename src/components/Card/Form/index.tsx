@@ -1,5 +1,5 @@
 import { Plus, X } from "lucide-react";
-import { memo, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,9 +10,9 @@ import axiosClient from "@/api/axiosClient";
 
 import { Button } from "@/components/ui/button";
 import FormTextarea from "@/components/Form/Textarea";
-import OverlayLoading from "@/components/OverlayLoading";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
+import { LoadingContext } from "@/context/Loading";
 import { ICreate, IResponse } from "@/types";
 import { ICardCreateRequest } from "@/types/card";
 
@@ -32,6 +32,8 @@ const CardForm = (props: IProps) => {
 
   const queryClient = useQueryClient();
 
+  const { setIsLoading } = useContext(LoadingContext);
+
   const {
     register,
     setFocus,
@@ -45,24 +47,25 @@ const CardForm = (props: IProps) => {
     resolver: yupResolver(schema),
   });
 
-  const {
-    mutate: createCard,
-    isPending,
-    isSuccess,
-  } = useMutation({
+  const { mutate: createCard, isSuccess } = useMutation({
     mutationFn: async (data: ICardCreateRequest) => {
       const res = await axiosClient.post<IResponse>(`${EApiPath.CARD}`, data);
       return res.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Card created!");
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
-        .finally(() => reset());
+        .then(() => {
+          reset();
+          toast.success(data.message || "Card created!");
+        });
     },
     onError: (error) => {
       setFocus("title");
       toast.error(error.message || "Create card failure!");
+    },
+    onSettled: () => {
+      setIsLoading(false);
     },
   });
 
@@ -73,6 +76,7 @@ const CardForm = (props: IProps) => {
   }, [isEdit, isSuccess, setFocus]);
 
   const onSubmit = (data: ICreate) => {
+    setIsLoading(true);
     createCard({
       title: data.title,
       listId,
@@ -96,7 +100,6 @@ const CardForm = (props: IProps) => {
             <X className="w-4 h-4" />
           </Button>
         </div>
-        {isPending ? <OverlayLoading /> : null}
       </form>
     );
   }

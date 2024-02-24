@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import { ElementRef, ReactNode, useEffect, useRef } from "react";
+import { ElementRef, ReactNode, useContext, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -20,6 +20,7 @@ import FormInput from "./Input";
 import FormPicker from "./Picker";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
+import { LoadingContext } from "@/context/Loading";
 import { IParams, IResponse } from "@/types";
 import { IBoard, IBoardRequest } from "@/types/board";
 
@@ -43,6 +44,8 @@ const FormPopover = (props: IProps) => {
   const queryClient = useQueryClient();
 
   const closeRef = useRef<ElementRef<"button">>(null);
+
+  const { setIsLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -79,18 +82,25 @@ const FormPopover = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      reset();
-      closeRef.current?.click();
-      toast.success(data.message || "Board created!");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.BOARDS] });
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEY.BOARDS] })
+        .then(() => {
+          reset();
+          closeRef.current?.click();
+          toast.success(data.message || "Board created!");
+        });
     },
     onError: (error) => {
       setFocus("title");
       toast.error(error.message || "Create board failure!");
     },
+    onSettled: () => {
+      setIsLoading(false);
+    },
   });
 
   const onSubmit = (data: IBoard) => {
+    setIsLoading(true);
     createBoard({
       ...data,
       orgId: params.id,

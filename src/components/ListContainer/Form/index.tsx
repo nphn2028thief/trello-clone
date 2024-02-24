@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Plus, X } from "lucide-react";
 import * as Yup from "yup";
@@ -13,9 +13,9 @@ import axiosClient from "@/api/axiosClient";
 import useClickOuside from "@/hooks/useClickOutside";
 import FormInput from "@/components/Form/Input";
 import { Button } from "@/components/ui/button";
-import OverlayLoading from "@/components/OverlayLoading";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
+import { LoadingContext } from "@/context/Loading";
 import { ICreate } from "@/types";
 import { IListRequest } from "@/types/list";
 
@@ -35,6 +35,8 @@ const ListForm = (props: IProps) => {
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
+  const { setIsLoading } = useContext(LoadingContext);
+
   const formRef = useClickOuside(() => setIsEdit(false));
 
   const { register, setFocus, reset, handleSubmit } = useForm<ICreate>({
@@ -45,24 +47,25 @@ const ListForm = (props: IProps) => {
   });
 
   // Call and handle api create list
-  const {
-    mutate: createList,
-    isPending,
-    isSuccess,
-  } = useMutation({
+  const { mutate: createList, isSuccess } = useMutation({
     mutationFn: async (data: IListRequest) => {
       const res = await axiosClient.post(`${EApiPath.LIST}`, data);
       return res.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "List created!");
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
-        .finally(() => reset());
+        .then(() => {
+          reset();
+          toast.success(data.message || "List created!");
+        });
     },
     onError: (error) => {
       setFocus("title");
       toast.error(error.message || "Create board failure!");
+    },
+    onSettled: () => {
+      setIsLoading(false);
     },
   });
 
@@ -73,6 +76,7 @@ const ListForm = (props: IProps) => {
   }, [isEdit, isSuccess, setFocus]);
 
   const onSubmit = (data: ICreate) => {
+    setIsLoading(true);
     createList({
       title: data.title,
       boardId,
@@ -96,7 +100,7 @@ const ListForm = (props: IProps) => {
           />
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="">
+            <Button type="submit" variant="primary">
               Add list
             </Button>
             <Button
@@ -123,10 +127,7 @@ const ListForm = (props: IProps) => {
   };
 
   return (
-    <li className="w-[288px] h-full shrink-0">
-      {isPending ? <OverlayLoading /> : null}
-      {handleRenderWhenEditMode()}
-    </li>
+    <li className="w-[288px] h-full shrink-0">{handleRenderWhenEditMode()}</li>
   );
 };
 

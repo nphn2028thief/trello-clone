@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementRef, memo, useRef } from "react";
+import { ElementRef, memo, useContext, useRef } from "react";
 import { Copy, MoreHorizontal, Plus, Trash, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import OverlayLoading from "@/components/OverlayLoading";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
+import { LoadingContext } from "@/context/Loading";
 import { IResponse } from "@/types";
 import { IListCopyRequest, IListResponse } from "@/types/list";
 
@@ -36,7 +36,9 @@ const ListOptions = (props: IProps) => {
 
   const closeRef = useRef<ElementRef<"button">>(null);
 
-  const { mutate: copyList, isPending } = useMutation({
+  const { setIsLoading } = useContext(LoadingContext);
+
+  const { mutate: copyList } = useMutation({
     mutationFn: async (data: IListCopyRequest) => {
       const res = await axiosClient.post<IResponse>(
         `${EApiPath.COPY_LIST}`,
@@ -45,12 +47,18 @@ const ListOptions = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "List copied!");
-      closeRef.current?.click();
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
+        .then(() => {
+          toast.success(data.message || "List copied!");
+          closeRef.current?.click();
+        });
     },
     onError: (error) => {
       toast.error(error.message || "Copy list failure!");
+    },
+    onSettled: () => {
+      setIsLoading(false);
     },
   });
 
@@ -62,8 +70,12 @@ const ListOptions = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "List deleted!");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
+        .then(() => {
+          setIsLoading(false);
+          toast.success(data.message || "List deleted!");
+        });
     },
     onError: (error) => {
       toast.error(error.message || "Delete list failure!");
@@ -72,7 +84,6 @@ const ListOptions = (props: IProps) => {
 
   return (
     <Popover>
-      {isPending ? <OverlayLoading /> : null}
       <PopoverTrigger asChild>
         <Button variant="transparent" className="w-auto h-auto p-2 text-black">
           <MoreHorizontal className="w-4 h-4" />
@@ -108,15 +119,16 @@ const ListOptions = (props: IProps) => {
         <Button
           variant="ghost"
           className="w-full justify-between pl-5 pr-4 py-2 font-normal rounded-none"
-          onClick={() =>
+          onClick={() => {
+            setIsLoading(true);
             copyList({
               listId: data._id,
               title: data.title,
               boardId,
               orgId,
               cards: data.cards.map((card) => ({ ..._.omit(card, "_id") })),
-            })
-          }
+            });
+          }}
         >
           Copy list
           <Copy className="w-4 h-4" />
@@ -125,7 +137,10 @@ const ListOptions = (props: IProps) => {
         <Button
           variant="ghost"
           className="w-full justify-between pl-5 pr-4 text-red-600 hover:text-red-500 py-2 font-normal rounded-none"
-          onClick={() => deleteList()}
+          onClick={() => {
+            setIsLoading(true);
+            deleteList();
+          }}
         >
           Delete this list
           <Trash className="w-4 h-4" />
