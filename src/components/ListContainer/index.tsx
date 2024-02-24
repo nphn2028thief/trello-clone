@@ -31,7 +31,7 @@ const ListContainer = (props: IProps) => {
   const [lists, setLists] = useState<IListResponse[]>([]);
 
   // Call and handle api get lists by board and org
-  const { data, isLoading } = useGet(
+  const { data, isLoading, isFetching } = useGet(
     [QUERY_KEY.LISTS],
     () => getListsByBoardAndOrg(boardId, orgId),
     true,
@@ -170,7 +170,7 @@ const ListContainer = (props: IProps) => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <ol className="h-full flex gap-3 pr-4 relative">
         <LazyLoading className="!bg-transparent" />
