@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 
 import siteConfig from "@/configs/site";
 import QueryClientProvider from "./QueryClientProvider";
+import { LoadingProvider } from "@/context/Loading";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
@@ -28,10 +29,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider>
-          <ClerkProvider>
-            {children}
-            <ToastContainer autoClose={2000} />
-          </ClerkProvider>
+          <LoadingProvider>
+            <ClerkProvider>
+              {children}
+              <ToastContainer autoClose={2000} />
+            </ClerkProvider>
+          </LoadingProvider>
         </QueryClientProvider>
       </body>
     </html>

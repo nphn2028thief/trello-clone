@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +14,7 @@ import useClickOuside from "@/hooks/useClickOutside";
 import FormInput from "@/components/Form/Input";
 import { Button } from "@/components/ui/button";
 import { EApiPath } from "@/constants/path";
+import { LoadingContext } from "@/context/Loading";
 import { ICreate, IResponse } from "@/types";
 import { IBoard, IBoardResponse } from "@/types/board";
 
@@ -25,6 +26,8 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
   const router = useRouter();
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const { setIsLoading } = useContext(LoadingContext);
 
   const defaultValues = useMemo<ICreate>(() => {
     return {
@@ -68,10 +71,18 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
       setFocus("title");
       toast.error(error.message || "Update board failure!");
     },
+    onSettled: () => {
+      setIsLoading(false);
+    },
   });
 
   const onSubmit = (data: ICreate) => {
-    isDirty ? updateTitleBoard(data) : setIsEdit(false);
+    if (isDirty) {
+      setIsLoading(true);
+      updateTitleBoard(data);
+    } else {
+      setIsEdit(false);
+    }
   };
 
   const formRef = useClickOuside(handleSubmit(onSubmit));

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +14,7 @@ import ListOptions from "../Options";
 import FormInput from "@/components/Form/Input";
 import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
+import { LoadingContext } from "@/context/Loading";
 import { ICreate, IResponse } from "@/types";
 import { IListResponse } from "@/types/list";
 
@@ -34,6 +35,8 @@ const ListHeader = (props: IProps) => {
   const queryClient = useQueryClient();
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const { setIsLoading } = useContext(LoadingContext);
 
   const defaultValues = useMemo<ICreate>(() => {
     return {
@@ -73,19 +76,30 @@ const ListHeader = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      reset();
-      setIsEdit(false);
-      toast.success(data.message || "List updated!");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
+        .then(() => {
+          reset();
+          setIsEdit(false);
+          toast.success(data.message || "List updated!");
+        });
     },
     onError: (error) => {
       setFocus("title");
       toast.error(error.message || "Update list failure!");
     },
+    onSettled: () => {
+      setIsLoading(false);
+    },
   });
 
   const onSubmit = (data: ICreate) => {
-    isDirty ? updateList(data) : setIsEdit(false);
+    if (isDirty) {
+      setIsLoading(true);
+      updateList(data);
+    } else {
+      setIsEdit(false);
+    }
   };
 
   const formRef = useClickOuside(handleSubmit(onSubmit));

@@ -12,7 +12,6 @@ import useGet from "@/hooks/useGet";
 import ListForm from "./Form";
 import ListItem from "./Item";
 import LazyLoading from "../LazyLoading";
-import OverlayLoading from "../OverlayLoading";
 import { QUERY_KEY } from "@/constants/key";
 import { EDndType } from "@/constants/dnd";
 import { EApiPath } from "@/constants/path";
@@ -32,7 +31,7 @@ const ListContainer = (props: IProps) => {
   const [lists, setLists] = useState<IListResponse[]>([]);
 
   // Call and handle api get lists by board and org
-  const { data, isLoading, isFetching } = useGet(
+  const { data, isLoading } = useGet(
     [QUERY_KEY.LISTS],
     () => getListsByBoardAndOrg(boardId, orgId),
     true,
@@ -192,8 +191,6 @@ const ListContainer = (props: IProps) => {
             {...provided.droppableProps}
             className="h-full flex gap-3 pr-4 relative"
           >
-            {isFetching ? <OverlayLoading /> : null}
-
             {lists &&
               lists.map((item, index) => (
                 <ListItem
