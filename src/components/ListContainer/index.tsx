@@ -171,7 +171,7 @@ const ListContainer = (props: IProps) => {
     }
   };
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <ol className="h-full flex gap-3 pr-4 relative">
         <LazyLoading className="!bg-transparent" />
