@@ -47,12 +47,9 @@ const ListOptions = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      queryClient
-        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
-        .then(() => {
-          toast.success(data.message || "List copied!");
-          closeRef.current?.click();
-        });
+      toast.success(data.message || "List copied!");
+      closeRef.current?.click();
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
     },
     onError: (error) => {
       toast.error(error.message || "Copy list failure!");
@@ -70,12 +67,9 @@ const ListOptions = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      queryClient
-        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
-        .then(() => {
-          setIsLoading(false);
-          toast.success(data.message || "List deleted!");
-        });
+      setIsLoading(false);
+      toast.success(data.message || "List deleted!");
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
     },
     onError: (error) => {
       toast.error(error.message || "Delete list failure!");

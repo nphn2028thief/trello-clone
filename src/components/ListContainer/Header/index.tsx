@@ -76,13 +76,10 @@ const ListHeader = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      queryClient
-        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
-        .then(() => {
-          reset();
-          setIsEdit(false);
-          toast.success(data.message || "List updated!");
-        });
+      reset();
+      setIsEdit(false);
+      toast.success(data.message || "List updated!");
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
     },
     onError: (error) => {
       setFocus("title");

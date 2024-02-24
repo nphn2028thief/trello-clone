@@ -53,12 +53,9 @@ const ListForm = (props: IProps) => {
       return res.data;
     },
     onSuccess: (data) => {
-      queryClient
-        .invalidateQueries({ queryKey: [QUERY_KEY.LISTS] })
-        .then(() => {
-          reset();
-          toast.success(data.message || "List created!");
-        });
+      reset();
+      toast.success(data.message || "List created!");
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.LISTS] });
     },
     onError: (error) => {
       setFocus("title");
