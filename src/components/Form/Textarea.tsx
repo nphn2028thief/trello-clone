@@ -29,7 +29,7 @@ const FormTextarea = (props: IProps) => {
         <Textarea
           id={htmlFor}
           className={cn(
-            "resize-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus:ring-0 outline-none shadow-sm",
+            "resize-none focus-within:border-[#aaa] focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus:ring-0 outline-none shadow-sm",
             className
           )}
           placeholder={placeholder}
