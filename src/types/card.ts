@@ -1,3 +1,5 @@
+import { ILogResponse } from "./log";
+
 export interface ICardCreateRequest {
   title: string;
   listId: string;
@@ -10,6 +12,7 @@ export interface ICard {
   order: number;
   listId: string;
   listTitle: string;
+  logs: ILogResponse[];
 }
 
 export interface IUpdateOrderCard {
@@ -21,11 +24,12 @@ export interface IUpdateOrderCard {
 }
 
 export interface IUpdateCard {
-  title: string;
+  title?: string;
   description?: string;
 }
 
 export interface ICopyCard {
+  orgId: string;
   listId: string;
   cardId: string;
   title: string;
