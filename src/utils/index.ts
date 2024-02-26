@@ -1,3 +1,5 @@
+import { ACTION, ENTITY_TYPE } from "@/constants/entity";
+
 // Sort array depends on startIndex and endIndex
 export const reorder = <T>(list: T[], startIndex: number, endIndex: number) => {
   // Create copy of list array
@@ -9,4 +11,21 @@ export const reorder = <T>(list: T[], startIndex: number, endIndex: number) => {
   // Insert removed element at endIndex in result array
   results.splice(endIndex, 0, removed);
   return results;
+};
+
+export const generateLogMessage = (
+  action: ACTION,
+  entityType: ENTITY_TYPE,
+  entityTitle: string
+) => {
+  switch (action) {
+    case ACTION.CREATE:
+      return `Created ${entityType} "${entityTitle}".`;
+    case ACTION.UPDATE:
+      return `Updated ${entityType} "${entityTitle}".`;
+    case ACTION.DELETE:
+      return `Deleted ${entityType} "${entityTitle}".`;
+    default:
+      return `Unknown action ${entityType} "${entityTitle}".`;
+  }
 };

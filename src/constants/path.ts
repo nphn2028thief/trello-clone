@@ -20,4 +20,6 @@ export enum EApiPath {
   CARDS = "/cards",
   CARD_ORDER = "/card/order",
   COPY_CARD = "/card/copy",
+  LOG = "/log",
+  LOGS = "/logs",
 }
