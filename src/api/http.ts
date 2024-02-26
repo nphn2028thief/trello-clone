@@ -4,6 +4,7 @@ import { EApiPath } from "@/constants/path";
 import { unsplash } from "@/lib/unsplash";
 import { IBoardResponse } from "@/types/board";
 import { IListResponse } from "@/types/list";
+import { IOrgLimitResponse } from "@/types/orgLimit";
 
 // Unsplash
 export const getUnsplashImage = async () => {
@@ -31,12 +32,17 @@ export const getBoardByIdAndOrgId = async (orgId: string, id: string) => {
 };
 
 // List
-export const getListsByBoardAndOrg = async (
-  boardId: string,
-  organizationId: string
-) => {
+export const getListsByBoardAndOrg = async (boardId: string, orgId: string) => {
   const res = await axiosClient.get<IListResponse[]>(
-    `${EApiPath.LISTS}/${boardId}/${organizationId}`
+    `${EApiPath.LISTS}/${boardId}/${orgId}`
+  );
+  return res.data;
+};
+
+// Org limit
+export const getOrgLimit = async (orgId: string) => {
+  const res = await axiosClient.get<IOrgLimitResponse>(
+    `${EApiPath.ORG_LIMIT}/${orgId}`
   );
   return res.data;
 };

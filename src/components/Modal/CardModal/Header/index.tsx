@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useEffect, useMemo } from "react";
 import { Layout, X } from "lucide-react";
 import { useForm } from "react-hook-form";
