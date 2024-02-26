@@ -23,6 +23,7 @@ import { QUERY_KEY } from "@/constants/key";
 import { LoadingContext } from "@/context/Loading";
 import { IParams, IResponse } from "@/types";
 import { IBoard, IBoardRequest } from "@/types/board";
+import usePremiumModal from "@/hooks/usePremiumModal";
 
 interface IProps {
   children: ReactNode;
@@ -46,6 +47,7 @@ const FormPopover = (props: IProps) => {
   const closeRef = useRef<ElementRef<"button">>(null);
 
   const { setIsLoading } = useContext(LoadingContext);
+  const { onOpen } = usePremiumModal();
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,7 +64,6 @@ const FormPopover = (props: IProps) => {
   const {
     register,
     reset,
-    setFocus,
     setValue,
     setError,
     formState: { errors },
@@ -86,9 +87,10 @@ const FormPopover = (props: IProps) => {
       closeRef.current?.click();
       toast.success(data.message || "Board created!");
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.BOARDS] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.ORG_LIMIT] });
     },
     onError: (error) => {
-      setFocus("title");
+      onOpen();
       toast.error(error.message || "Create board failure!");
     },
     onSettled: () => {

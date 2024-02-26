@@ -1,8 +1,11 @@
+"use client";
+
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HelpCircle, User2 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
-import { getBoards } from "@/api/http";
+import { getBoards, getOrgLimit } from "@/api/http";
 
 import useGet from "@/hooks/useGet";
 import { Skeleton } from "../ui/skeleton";
@@ -12,9 +15,13 @@ import { QUERY_KEY } from "@/constants/key";
 import { EPath } from "@/constants/path";
 import { IParams } from "@/types";
 import { IBoardResponse } from "@/types/board";
+import { IOrgLimitResponse } from "@/types/orgLimit";
+import { MAX_FREE_BOARDS } from "@/constants/board";
 
 const BoardList = () => {
   const params = useParams<IParams>();
+
+  const { orgId } = useAuth();
 
   // Call and handle api get boards
   const {
@@ -24,6 +31,14 @@ const BoardList = () => {
   } = useGet<IBoardResponse[]>(
     [QUERY_KEY.BOARDS, params.id],
     () => getBoards(params.id),
+    true,
+    true
+  );
+
+  // Call and handle api get org limit
+  const { data } = useGet<IOrgLimitResponse>(
+    [QUERY_KEY.ORG_LIMIT, orgId],
+    () => getOrgLimit(orgId as string),
     true,
     true
   );
@@ -71,7 +86,9 @@ const BoardList = () => {
             <p className="text-sm md:text-base text-center">
               Create a new board
             </p>
-            <span className="text-xs md:text-sm">5 remaining</span>
+            <span className="text-xs md:text-sm">{`${
+              MAX_FREE_BOARDS - (data?.count as number)
+            } remaining`}</span>
             <Hint
               description="Free workspaces can have up to 5 open boards. For unlimited boards upgrade this workspaces."
               sideOffset={40}

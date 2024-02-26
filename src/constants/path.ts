@@ -22,4 +22,6 @@ export enum EApiPath {
   COPY_CARD = "/card/copy",
   LOG = "/log",
   LOGS = "/logs",
+  ORG_LIMIT = "/org-limit",
+  ORG_SUBSCRIPTION = "/org-subscription",
 }
