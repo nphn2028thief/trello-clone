@@ -13,12 +13,12 @@ import Hint from "../Hint";
 import FormPopover from "../Form/Popover";
 import { QUERY_KEY } from "@/constants/key";
 import { EPath } from "@/constants/path";
+import { MAX_FREE_BOARDS } from "@/constants/board";
 import { IParams } from "@/types";
 import { IBoardResponse } from "@/types/board";
 import { IOrgLimitResponse } from "@/types/orgLimit";
-import { MAX_FREE_BOARDS } from "@/constants/board";
 
-const BoardList = () => {
+const BoardList = ({ isValid }: { isValid: boolean }) => {
   const params = useParams<IParams>();
 
   const { orgId } = useAuth();
@@ -86,9 +86,11 @@ const BoardList = () => {
             <p className="text-sm md:text-base text-center">
               Create a new board
             </p>
-            <span className="text-xs md:text-sm">{`${
-              MAX_FREE_BOARDS - (data?.count as number)
-            } remaining`}</span>
+            <span className="text-xs md:text-sm">
+              {isValid
+                ? "Unlimited"
+                : `${MAX_FREE_BOARDS - (data?.count as number)} remaining`}
+            </span>
             <Hint
               description="Free workspaces can have up to 5 open boards. For unlimited boards upgrade this workspaces."
               sideOffset={40}

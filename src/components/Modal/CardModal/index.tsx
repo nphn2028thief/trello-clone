@@ -118,7 +118,7 @@ const CardModal = () => {
                 <div className="flex flex-col gap-2">
                   <Button
                     variant="gray"
-                    className="h-auto gap-2"
+                    className="h-auto gap-2 rounded-sm"
                     onClick={() => {
                       if (card) {
                         setIsLoading(true);
@@ -136,8 +136,8 @@ const CardModal = () => {
                     Copy
                   </Button>
                   <Button
-                    variant="gray"
-                    className="h-auto gap-2"
+                    variant="error"
+                    className="h-auto gap-2 rounded-sm"
                     onClick={() => {
                       if (card) {
                         setIsLoading(true);
@@ -145,7 +145,7 @@ const CardModal = () => {
                       }
                     }}
                   >
-                    <TrashIcon className="w-4 h-4" />
+                    <TrashIcon fill="#fff" className="w-4 h-4" />
                     Delete
                   </Button>
                 </div>

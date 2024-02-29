@@ -51,7 +51,7 @@ const CarđHeader = ({
   }, [card, defaultValues, reset]);
 
   const onSubmit = (data: IUpdateCard) => {
-    if (isDirty) {
+    if (isDirty && card?._id) {
       setIsLoading(true);
       updateCard({ title: data.title });
     }
