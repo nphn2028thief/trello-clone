@@ -72,7 +72,7 @@ const CardDescription = (props: IProps) => {
   }, [isEdit, setFocus]);
 
   const onSubmit = (data: IUpdateCard) => {
-    if (isDirty) {
+    if (isDirty && card?._id) {
       setIsLoading(true);
       updateCard({ description: data.description });
     }

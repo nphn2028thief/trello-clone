@@ -4,4 +4,5 @@ export enum QUERY_KEY {
   BOARDS = "boards",
   LISTS = "lists",
   ORG_LIMIT = "orgLimit",
+  ORG_SUBSCRIPTION = "orgSubscription",
 }

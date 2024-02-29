@@ -2,7 +2,7 @@
 
 import { memo, useContext } from "react";
 import Image from "next/image";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { currentUser, useAuth, useUser } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -14,10 +14,10 @@ import { Button } from "@/components/ui/button";
 import { EApiPath } from "@/constants/path";
 import { LoadingContext } from "@/context/Loading";
 import { IStripeCheckout } from "@/types/stripe";
+import { getUser } from "@/app/actions";
 
 const PremiumModal = () => {
-  const { orgId, userId } = useAuth();
-  const { user } = useUser();
+  const { orgId } = useAuth();
 
   const { isOpen, onClose } = usePremiumModal();
   const { setIsLoading } = useContext(LoadingContext);
@@ -67,13 +67,18 @@ const PremiumModal = () => {
           <Button
             variant="primary"
             className="w-full"
-            onClick={() => {
+            onClick={async () => {
               setIsLoading(true);
-              stripeCheckout({
-                userId: userId!,
-                orgId: orgId!,
-                userEmail: user?.emailAddresses[0].emailAddress!,
-              });
+
+              const data = await getUser();
+
+              if (data) {
+                stripeCheckout({
+                  userId: data.userId,
+                  orgId: data.orgId,
+                  userEmail: data.userEmail,
+                });
+              }
             }}
           >
             Upgrade

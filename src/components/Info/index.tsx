@@ -6,7 +6,7 @@ import { CreditCard } from "lucide-react";
 
 import { Skeleton } from "../ui/skeleton";
 
-const Info = () => {
+const Info = ({ isValid }: { isValid: boolean }) => {
   const { organization, isLoaded } = useOrganization();
 
   if (!isLoaded) {
@@ -40,7 +40,7 @@ const Info = () => {
         <p className="font-semibold text-xl">{organization?.name}</p>
         <div className="flex items-center gap-2">
           <CreditCard className="w-4 h-4" />
-          Free
+          {isValid ? "Premium" : "Free"}
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { unsplash } from "@/lib/unsplash";
 import { IBoardResponse } from "@/types/board";
 import { IListResponse } from "@/types/list";
 import { IOrgLimitResponse } from "@/types/orgLimit";
+import { IOrgSubscriptionResponse } from "@/types/orgSubscription";
 
 // Unsplash
 export const getUnsplashImage = async () => {
@@ -43,6 +44,13 @@ export const getListsByBoardAndOrg = async (boardId: string, orgId: string) => {
 export const getOrgLimit = async (orgId: string) => {
   const res = await axiosClient.get<IOrgLimitResponse>(
     `${EApiPath.ORG_LIMIT}/${orgId}`
+  );
+  return res.data;
+};
+
+export const getOrgSubscription = async (orgId: string) => {
+  const res = await axiosClient.get<IOrgSubscriptionResponse>(
+    `${EApiPath.ORG_SUBSCRIPTION}/${orgId}`
   );
   return res.data;
 };
