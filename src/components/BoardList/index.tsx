@@ -3,7 +3,6 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HelpCircle, User2 } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
 
 import { getBoards, getOrgLimit } from "@/api/http";
 
@@ -18,10 +17,8 @@ import { IParams } from "@/types";
 import { IBoardResponse } from "@/types/board";
 import { IOrgLimitResponse } from "@/types/orgLimit";
 
-const BoardList = ({ isValid }: { isValid: boolean }) => {
+const BoardList = ({ isValid, orgId }: { isValid: boolean; orgId: string }) => {
   const params = useParams<IParams>();
-
-  const { orgId } = useAuth();
 
   // Call and handle api get boards
   const {
