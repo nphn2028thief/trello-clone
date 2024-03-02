@@ -1,20 +1,17 @@
 "use client";
 
 import { useContext } from "react";
-import { getOrgSubscription } from "@/api/http";
 
 import { getUser } from "@/app/actions";
-import useGet from "@/hooks/useGet";
 import useStripeCheckout from "@/hooks/useStripeCheckout";
 import usePremiumModal from "@/hooks/usePremiumModal";
+import usePremium from "@/hooks/usePremium";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Info from "@/components/Info";
-import { QUERY_KEY } from "@/constants/key";
 import { LoadingContext } from "@/context/Loading";
 import { IParams } from "@/types";
-import { IOrgSubscriptionResponse } from "@/types/orgSubscription";
 
 const BillingPage = ({ params }: { params: IParams }) => {
   const { onOpen } = usePremiumModal();
@@ -23,16 +20,7 @@ const BillingPage = ({ params }: { params: IParams }) => {
   const stripeCheckout = useStripeCheckout();
 
   // Call and handle api get is premium
-  const {
-    data: orgSubscriptionData,
-    isLoading,
-    isFetching,
-  } = useGet<IOrgSubscriptionResponse>(
-    [QUERY_KEY.ORG_SUBSCRIPTION, params.id],
-    () => getOrgSubscription(params.id),
-    true,
-    true
-  );
+  const { orgSubscriptionData, isLoading, isFetching } = usePremium(params.id);
 
   const handleRenderButton = () => {
     if (isLoading || isFetching) {

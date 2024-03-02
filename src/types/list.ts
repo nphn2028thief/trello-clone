@@ -1,9 +1,10 @@
 import { ICard } from "./card";
 
-export interface IListRequest {
+export interface IListCreateRequest {
   title: string;
   boardId: string;
   orgId: string;
+  userId: string;
 }
 
 export interface IListResponse {
@@ -13,11 +14,17 @@ export interface IListResponse {
   cards: ICard[];
 }
 
-export interface IListCopyRequest extends IListRequest {
+export interface IListCopyRequest extends Omit<IListCreateRequest, "userId"> {
   listId: string;
   cards: Omit<ICard, "_id">[];
 }
 
 export interface IUpdateOrderList {
   lists: IListResponse[];
+}
+
+export interface IUpdateListRequest {
+  title: string;
+  userId: string;
+  orgId: string;
 }

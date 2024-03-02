@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { UseMutateFunction } from "@tanstack/react-query";
+import { useAuth } from "@clerk/nextjs";
 
 import useCardModal from "@/hooks/useCardModal";
 import useClickOuside from "@/hooks/useClickOutside";
@@ -13,7 +14,7 @@ import { DialogClose } from "@/components/ui/dialog";
 import FormInput from "@/components/Form/Input";
 import { LoadingContext } from "@/context/Loading";
 import { IResponse } from "@/types";
-import { IUpdateCard } from "@/types/card";
+import { IUpdateCard, IUpdateCardFormRequest } from "@/types/card";
 
 const schema = Yup.object({
   title: Yup.string().min(5),
@@ -24,10 +25,12 @@ const CarđHeader = ({
 }: {
   updateCard: UseMutateFunction<IResponse, Error, IUpdateCard, unknown>;
 }) => {
+  const { userId, orgId } = useAuth();
+
   const { card } = useCardModal();
   const { setIsLoading } = useContext(LoadingContext);
 
-  const defaultValues = useMemo<IUpdateCard>(() => {
+  const defaultValues = useMemo<IUpdateCardFormRequest>(() => {
     return {
       title: card ? card.title : "",
       description: card ? card.description : "",
@@ -39,7 +42,7 @@ const CarđHeader = ({
     reset,
     formState: { isDirty },
     handleSubmit,
-  } = useForm<IUpdateCard>({
+  } = useForm<IUpdateCardFormRequest>({
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -50,10 +53,10 @@ const CarđHeader = ({
     }
   }, [card, defaultValues, reset]);
 
-  const onSubmit = (data: IUpdateCard) => {
+  const onSubmit = (data: IUpdateCardFormRequest) => {
     if (isDirty && card?._id) {
       setIsLoading(true);
-      updateCard({ title: data.title });
+      updateCard({ title: data.title, userId: userId!, orgId: orgId! });
     }
 
     return;
@@ -66,7 +69,7 @@ const CarđHeader = ({
       <div className="w-6 h-6">
         <Layout className="w-full h-fulltext-neutral-700 mt-2" />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col">
         <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
           <FormInput
             htmlFor="title"

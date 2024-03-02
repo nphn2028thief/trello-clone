@@ -4,6 +4,7 @@ import { EApiPath } from "@/constants/path";
 import { unsplash } from "@/lib/unsplash";
 import { IBoardResponse } from "@/types/board";
 import { IListResponse } from "@/types/list";
+import { ILogResponse } from "@/types/log";
 import { IOrgLimitResponse } from "@/types/orgLimit";
 import { IOrgSubscriptionResponse } from "@/types/orgSubscription";
 
@@ -36,6 +37,14 @@ export const getBoardByIdAndOrgId = async (orgId: string, id: string) => {
 export const getListsByBoardAndOrg = async (boardId: string, orgId: string) => {
   const res = await axiosClient.get<IListResponse[]>(
     `${EApiPath.LISTS}/${boardId}/${orgId}`
+  );
+  return res.data;
+};
+
+// Log
+export const getLogsByOrg = async (orgId: string) => {
+  const res = await axiosClient.get<ILogResponse[]>(
+    `${EApiPath.LOGS}/${orgId}`
   );
   return res.data;
 };

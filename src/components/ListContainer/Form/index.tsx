@@ -6,6 +6,7 @@ import { Plus, X } from "lucide-react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 
 import axiosClient from "@/api/axiosClient";
@@ -17,7 +18,7 @@ import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
 import { LoadingContext } from "@/context/Loading";
 import { ICreate } from "@/types";
-import { IListRequest } from "@/types/list";
+import { IListCreateRequest } from "@/types/list";
 
 interface IProps {
   boardId: string;
@@ -30,6 +31,8 @@ const schema = Yup.object({
 
 const ListForm = (props: IProps) => {
   const { boardId, orgId } = props;
+
+  const { user } = useUser();
 
   const queryClient = useQueryClient();
 
@@ -48,7 +51,7 @@ const ListForm = (props: IProps) => {
 
   // Call and handle api create list
   const { mutate: createList, isSuccess } = useMutation({
-    mutationFn: async (data: IListRequest) => {
+    mutationFn: async (data: IListCreateRequest) => {
       const res = await axiosClient.post(`${EApiPath.LIST}`, data);
       return res.data;
     },
@@ -78,6 +81,7 @@ const ListForm = (props: IProps) => {
       title: data.title,
       boardId,
       orgId,
+      userId: user?.id!,
     });
   };
 

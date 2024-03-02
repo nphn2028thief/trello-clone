@@ -3,6 +3,7 @@
 import { ElementRef, memo, useContext, useRef } from "react";
 import { Copy, MoreHorizontal, Plus, Trash, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
@@ -31,6 +32,8 @@ interface IProps {
 
 const ListOptions = (props: IProps) => {
   const { data, boardId, orgId, onEnableEdit } = props;
+
+  const { user } = useUser();
 
   const queryClient = useQueryClient();
 
@@ -62,7 +65,7 @@ const ListOptions = (props: IProps) => {
   const { mutate: deleteList } = useMutation({
     mutationFn: async () => {
       const res = await axiosClient.delete<IResponse>(
-        `${EApiPath.LIST}/${data._id}/`
+        `${EApiPath.LIST}/${data._id}/${user?.id}/${orgId}`
       );
       return res.data;
     },

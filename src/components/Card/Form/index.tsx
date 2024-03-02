@@ -1,9 +1,12 @@
+"use client";
+
 import { Plus, X } from "lucide-react";
 import { memo, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 
 import axiosClient from "@/api/axiosClient";
@@ -29,6 +32,8 @@ const schema = Yup.object({
 
 const CardForm = (props: IProps) => {
   const { listId, isEdit, onEnableEdit, onDisableEdit } = props;
+
+  const { orgId, userId } = useAuth();
 
   const queryClient = useQueryClient();
 
@@ -77,6 +82,8 @@ const CardForm = (props: IProps) => {
     createCard({
       title: data.title,
       listId,
+      orgId: orgId!,
+      userId: userId!,
     });
   };
 

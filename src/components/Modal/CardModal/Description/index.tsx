@@ -15,13 +15,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { AlignLeft } from "lucide-react";
 import { useOnClickOutside } from "usehooks-ts";
+import { useAuth } from "@clerk/nextjs";
 
 import useCardModal from "@/hooks/useCardModal";
 import { Button } from "@/components/ui/button";
 import FormTextarea from "@/components/Form/Textarea";
 import { LoadingContext } from "@/context/Loading";
 import { IResponse } from "@/types";
-import { IUpdateCard } from "@/types/card";
+import { IUpdateCard, IUpdateCardFormRequest } from "@/types/card";
 
 interface IProps {
   isEdit: boolean;
@@ -36,12 +37,14 @@ const schema = Yup.object({
 const CardDescription = (props: IProps) => {
   const { isEdit, setIsEdit, updateCard } = props;
 
+  const { userId, orgId } = useAuth();
+
   const formRef = useRef<ElementRef<"form">>(null);
 
   const { card } = useCardModal();
   const { setIsLoading } = useContext(LoadingContext);
 
-  const defaultValues = useMemo<IUpdateCard>(() => {
+  const defaultValues = useMemo<IUpdateCardFormRequest>(() => {
     return {
       title: card ? card.title : "",
       description: card ? card.description : "",
@@ -54,7 +57,7 @@ const CardDescription = (props: IProps) => {
     setFocus,
     formState: { isDirty },
     handleSubmit,
-  } = useForm<IUpdateCard>({
+  } = useForm<IUpdateCardFormRequest>({
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -71,10 +74,14 @@ const CardDescription = (props: IProps) => {
     }
   }, [isEdit, setFocus]);
 
-  const onSubmit = (data: IUpdateCard) => {
+  const onSubmit = (data: IUpdateCardFormRequest) => {
     if (isDirty && card?._id) {
       setIsLoading(true);
-      updateCard({ description: data.description });
+      updateCard({
+        description: data.description,
+        userId: userId!,
+        orgId: orgId!,
+      });
     }
 
     setIsEdit(false);

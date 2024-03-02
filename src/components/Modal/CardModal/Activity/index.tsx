@@ -11,10 +11,12 @@ const CardActivity = () => {
   const { card } = useCardModal();
 
   return (
-    <div className="flex gap-3">
-      <ActivityIcon className="w-6 h-6 text-neutral-700" />
-      <div className="flex-1 flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-3">
+        <ActivityIcon className="w-6 h-6 text-neutral-700" />
         <p className="font-semibold">Activity</p>
+      </div>
+      <div className="flex-1 flex flex-col gap-4 md:ml-9">
         <ol className="flex flex-col gap-3">
           {card &&
             card.logs.map((item) => (
@@ -25,7 +27,7 @@ const CardActivity = () => {
                 <div className="flex flex-col gap-0.5">
                   <p className="text-sm text-muted-foreground">
                     <span className="font-semibold text-neutral-700">
-                      {item.user.name}{" "}
+                      {`${item.user.firstName} ${item.user.lastName}`}{" "}
                     </span>
                     {generateLogMessage(
                       item.action,
