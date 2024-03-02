@@ -21,7 +21,7 @@ import { IResponse } from "@/types";
 const BoardNavbarOptions = ({ id }: { id: string }) => {
   const router = useRouter();
 
-  const { orgId } = useAuth();
+  const { orgId, userId } = useAuth();
 
   const queryClient = useQueryClient();
 
@@ -29,7 +29,7 @@ const BoardNavbarOptions = ({ id }: { id: string }) => {
   const { mutate: deleteBoard } = useMutation({
     mutationFn: async () => {
       const res = await axiosClient.delete<IResponse>(
-        `${EApiPath.BOARD}/${id}`
+        `${EApiPath.BOARD}/${id}/${userId}`
       );
       return res.data;
     },

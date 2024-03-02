@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 
 import axiosClient from "@/api/axiosClient";
@@ -16,7 +17,7 @@ import { EApiPath } from "@/constants/path";
 import { QUERY_KEY } from "@/constants/key";
 import { LoadingContext } from "@/context/Loading";
 import { ICreate, IResponse } from "@/types";
-import { IListResponse } from "@/types/list";
+import { IListResponse, IUpdateListRequest } from "@/types/list";
 
 interface IProps {
   boardId: string;
@@ -31,6 +32,8 @@ const schema = Yup.object({
 
 const ListHeader = (props: IProps) => {
   const { boardId, orgId, data, onEnableEdit } = props;
+
+  const { user } = useUser();
 
   const queryClient = useQueryClient();
 
@@ -68,7 +71,7 @@ const ListHeader = (props: IProps) => {
   }, [data, reset, defaultValues]);
 
   const { mutate: updateList } = useMutation({
-    mutationFn: async (value: ICreate) => {
+    mutationFn: async (value: IUpdateListRequest) => {
       const res = await axiosClient.patch<IResponse>(
         `${EApiPath.LIST}/${data._id}`,
         value
@@ -93,7 +96,11 @@ const ListHeader = (props: IProps) => {
   const onSubmit = (data: ICreate) => {
     if (isDirty) {
       setIsLoading(true);
-      updateList(data);
+      updateList({
+        title: data.title,
+        orgId,
+        userId: user?.id!,
+      });
     } else {
       setIsEdit(false);
     }

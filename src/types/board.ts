@@ -4,6 +4,7 @@ export interface IBoard {
 }
 
 export interface IBoardRequest extends IBoard {
+  userId: string;
   orgId: string;
 }
 
@@ -17,4 +18,9 @@ export interface IBoardResponse {
     username: string;
     linkHtml: string;
   };
+}
+
+export interface IUpdateBoard {
+  userId: string;
+  title: string;
 }

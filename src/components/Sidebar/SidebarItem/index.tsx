@@ -40,12 +40,12 @@ const SidebarItem = (props: IProps) => {
       icon: <Layout className="w-4 h-4 mr-2" />,
       href: `${EPath.ORGANIZATION}/${organization.id}`,
     },
-    // {
-    //   id: 2,
-    //   label: "Activity",
-    //   icon: <Activity className="w-4 h-4 mr-2" />,
-    //   href: `${EPath.ORGANIZATION}/${organization.id}/activity`,
-    // },
+    {
+      id: 2,
+      label: "Activity",
+      icon: <Activity className="w-4 h-4 mr-2" />,
+      href: `${EPath.ORGANIZATION}/${organization.id}/activity`,
+    },
     {
       id: 3,
       label: "Settings",

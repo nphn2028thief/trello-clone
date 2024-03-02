@@ -1,3 +1,5 @@
+"use client";
+
 import { useParams } from "next/navigation";
 import { ElementRef, ReactNode, useContext, useEffect, useRef } from "react";
 import { X } from "lucide-react";
@@ -24,6 +26,7 @@ import { LoadingContext } from "@/context/Loading";
 import { IParams, IResponse } from "@/types";
 import { IBoard, IBoardRequest } from "@/types/board";
 import usePremiumModal from "@/hooks/usePremiumModal";
+import { useUser } from "@clerk/nextjs";
 
 interface IProps {
   children: ReactNode;
@@ -41,6 +44,8 @@ const FormPopover = (props: IProps) => {
   const { children, side = "bottom", align, sideOffset = 0 } = props;
 
   const params = useParams<IParams>();
+
+  const { user } = useUser();
 
   const queryClient = useQueryClient();
 
@@ -102,6 +107,7 @@ const FormPopover = (props: IProps) => {
     setIsLoading(true);
     createBoard({
       ...data,
+      userId: user?.id!,
       orgId: params.id,
     });
   };

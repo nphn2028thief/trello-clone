@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
+import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 
 import axiosClient from "@/api/axiosClient";
@@ -16,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { EApiPath } from "@/constants/path";
 import { LoadingContext } from "@/context/Loading";
 import { ICreate, IResponse } from "@/types";
-import { IBoard, IBoardResponse } from "@/types/board";
+import { IBoardResponse, IUpdateBoard } from "@/types/board";
 
 const schema = Yup.object({
   title: Yup.string().required(),
@@ -24,6 +25,8 @@ const schema = Yup.object({
 
 const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
   const router = useRouter();
+
+  const { user } = useUser();
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -54,7 +57,7 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
 
   // Call and handle api update title board
   const { mutate: updateTitleBoard } = useMutation({
-    mutationFn: async (value: Omit<IBoard, "image">) => {
+    mutationFn: async (value: IUpdateBoard) => {
       const res = await axiosClient.patch<IResponse>(
         `${EApiPath.BOARD}/${data._id}`,
         value
@@ -79,7 +82,10 @@ const BoardNavbarTitle = ({ data }: { data: IBoardResponse }) => {
   const onSubmit = (data: ICreate) => {
     if (isDirty) {
       setIsLoading(true);
-      updateTitleBoard(data);
+      updateTitleBoard({
+        userId: user?.id!,
+        title: data.title,
+      });
     } else {
       setIsEdit(false);
     }

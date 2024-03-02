@@ -3,6 +3,8 @@ import { ILogResponse } from "./log";
 export interface ICardCreateRequest {
   title: string;
   listId: string;
+  orgId: string;
+  userId: string;
 }
 
 export interface ICard {
@@ -23,9 +25,14 @@ export interface IUpdateOrderCard {
   destCards: ICard[];
 }
 
-export interface IUpdateCard {
+export interface IUpdateCardFormRequest {
   title?: string;
   description?: string;
+}
+
+export interface IUpdateCard extends IUpdateCardFormRequest {
+  userId: string;
+  orgId: string;
 }
 
 export interface ICopyCard {
